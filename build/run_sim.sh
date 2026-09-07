@@ -30,4 +30,4 @@ cat > "${TOP}_run.tcl" <<TCL
 run all
 quit
 TCL
-xsim --nolog "${TOP}_sim" -tclbatch "${TOP}_run.tcl"
+xsim --nolog "${TOP}_sim" -tclbatch "${TOP}_run.tcl" $XSIM_ARGS
