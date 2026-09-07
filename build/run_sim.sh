@@ -4,7 +4,7 @@
 # Runs out of $REPO/work so build artifacts stay out of git.
 set -e
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
-WORK="$REPO/work"
+WORK="${HACK_WORK:-/tmp/hack_work_$USER}"
 mkdir -p "$WORK"
 
 VIV_SETTINGS=/proj/gsd/vivado/2025.2/Vivado/settings64.sh

@@ -17,7 +17,7 @@ module tb_cpu;
     wire [15:0] instruction = rom[pc];
 
     CPU dut(
-        .inM(inM), .instruction(instruction), .reset(reset), .clk(clk),
+        .inM(inM), .instruction(instruction), .reset(reset), .en(1'b1), .clk(clk),
         .outM(outM), .writeM(writeM), .addressM(addressM), .pc(pc)
     );
 

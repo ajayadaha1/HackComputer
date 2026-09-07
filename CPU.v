@@ -21,6 +21,7 @@ module CPU(
     input  [15:0] inM,          // M value input  (RAM[A])
     input  [15:0] instruction,  // instruction to execute
     input         reset,        // reset==1 -> restart from ROM[0]
+    input         en,           // step enable: CPU advances only when en==1
     input         clk,
     output [15:0] outM,         // M value output
     output        writeM,       // write to M?
@@ -40,7 +41,7 @@ module CPU(
     Mux16 muxA(.a(instruction), .b(aluOut), .s(isC), .out(aRegIn));
     // Load A on any A-instruction, or a C-instruction whose d1 (dest A) bit is set.
     wire loadA = isA | (isC & instruction[5]);
-    Register aRegister(.in(aRegIn), .load(loadA), .clk(clk), .out(aReg));
+    Register aRegister(.in(aRegIn), .load(loadA & en), .clk(clk), .out(aReg));
 
     assign addressM = aReg[14:0];
 
@@ -53,7 +54,7 @@ module CPU(
     // Load on a C-instruction whose d2 (dest D) bit is set.
     wire [15:0] dReg;
     wire loadD = isC & instruction[4];
-    Register dRegister(.in(aluOut), .load(loadD), .clk(clk), .out(dReg));
+    Register dRegister(.in(aluOut), .load(loadD & en), .clk(clk), .out(dReg));
 
     // ---------------- ALU ----------------
     wire zr, ng;
@@ -77,8 +78,9 @@ module CPU(
 
     // ---------------- Program counter ----------------
     // Jump loads A into PC; otherwise increment; reset has top priority.
+    // The `en` gate freezes inc/jump between CPU steps; reset stays immediate.
     wire [15:0] pcOut;
-    PC pc0(.in(aReg), .load(doJump), .inc(1'b1), .reset(reset), .clk(clk), .out(pcOut));
+    PC pc0(.in(aReg), .load(doJump & en), .inc(en), .reset(reset), .clk(clk), .out(pcOut));
     assign pc = pcOut[14:0];
 
 endmodule
