@@ -1,0 +1,4 @@
+# keep bitstreams and probe/report files tracked (override repo-root *.bit ignore)
+!*.bit
+!*.ltx
+!*.rpt
