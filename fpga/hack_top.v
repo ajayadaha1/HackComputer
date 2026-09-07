@@ -76,7 +76,15 @@ module hack_top #(
         .key_code(key_code)
     );
 
-    // ---------------- debug ----------------
+    // ---------------- debug (ILA taps) ----------------
+    // dont_touch keeps these driven through opt_design so the ILA can probe them
+    (* mark_debug = "true", dont_touch = "true" *) wire [14:0] dbg_pc       = pc_dbg;
+    (* mark_debug = "true", dont_touch = "true" *) wire [15:0] dbg_instr    = instr_dbg;
+    (* mark_debug = "true", dont_touch = "true" *) wire        dbg_writeM   = writeM_dbg;
+    (* mark_debug = "true", dont_touch = "true" *) wire [14:0] dbg_addressM = addressM_dbg;
+    (* mark_debug = "true", dont_touch = "true" *) wire [15:0] dbg_outM     = outM_dbg;
+    (* mark_debug = "true", dont_touch = "true" *) wire [15:0] dbg_key      = key_code;
+
     assign led = {writeM_dbg, pc_dbg};
 
 endmodule
