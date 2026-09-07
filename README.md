@@ -14,8 +14,12 @@ computer on real hardware:
 | Completed core | `Inc16.v`, `PC.v`, `CPU.v`, `ROM32K.v`, `Memory.v`, `Computer.v` |
 | FPGA I/O | `fpga/vga_controller.v`, `fpga/ps2_keyboard.v`, `fpga/hack_top.v` |
 | Constraints | `fpga/basys3.xdc`, `fpga/timing.xdc` |
-| Build / tools | `build/build.tcl`, `build/run_sim.sh`, `tools/asm.py` |
-| Programs / tests | `sim/*.v`, `sim/games/blocks.asm` |
+| Build / tools | `build/build.tcl`, `build/run_sim.sh`, `build/program.tcl`, `tools/asm.py` |
+| Programs / tests | `sim/*.v`, `sim/games/blocks.asm`, `sim/games/tetris.asm` |
+
+Prebuilt bitstreams (all meet timing at 100 MHz) live in `bitstreams/`:
+`hack_tetris.bit` (falling-blocks game), `hack_blocks.bit` (free-move demo) and
+`hack_blocks_ila.bit` (+`.ltx`, with an ILA).
 
 ## Architecture
 
@@ -79,12 +83,18 @@ and a `hack_top.ltx` probes file is written.
 Connect a VGA monitor and a USB keyboard, then:
 
 ```bash
-vivado -mode batch -source build/program.tcl        # see build/program.tcl
-# or in the Vivado Hardware Manager: open target, program hack_top.bit
+vivado -mode batch -source build/program.tcl                    # loads bitstreams/hack_tetris.bit
+vivado -mode batch -source build/program.tcl -tclargs bitstreams/hack_blocks.bit
 ```
 
-Controls for the block demo (`sim/games/blocks.asm`): **arrow keys** move the
-white block; **btnC** resets.
+or use the Vivado Hardware Manager: open target, program `hack_top.bit`.
+
+Controls:
+* **hack_tetris** — LEFT / RIGHT arrows steer the block; it falls one row per
+  tick and locks/stacks at the bottom. The board resets when a stack reaches the
+  top (game over).
+* **hack_blocks** — arrow keys move a white block freely around the screen.
+* **btnC** — reset.
 
 ## Writing / loading your own program (and a path to full Tetris)
 

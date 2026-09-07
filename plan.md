@@ -55,3 +55,25 @@ sim/                testbenches (*_tb.v) + Hack test programs (*.hack)
 build/              build.tcl (synth/impl/bitstream), sim.tcl (xsim), helper scripts
 tools/              asm/hack -> $readmemh converters, scancode helpers
 ```
+
+## Status: COMPLETE
+
+All milestones done and pushed. Verified in Vivado xsim and Vivado 2025.2 impl:
+
+| Milestone | Result |
+|-----------|--------|
+| M0 setup / upstream sync | in sync with upstream `1ae424e`; plan added |
+| M1 Inc16/PC + DMux/Or16 fixes | `tb_core` ALL PASS |
+| M2 CPU | `tb_cpu` Add=5, Sum1..10=55 ALL PASS |
+| M3 Memory/ROM/Computer | `tb_computer` mmap I/O ALL PASS |
+| M4/M5 VGA + PS/2 + top + xdc | `tb_vga` (800/96,420000/1600), `tb_top` (key→CPU→screen) ALL PASS |
+| M6 synth/ILA/bitstream | timing MET (WNS +1.74 ns no-ILA, +1.30 ns ILA); ~1.3% LUT, 57% BRAM |
+| M7 game | `tb_game` (block demo) + `tb_tetris` (falling blocks) ALL PASS; bitstreams built |
+
+Deliverables: `bitstreams/hack_tetris.bit` (falling-blocks game),
+`bitstreams/hack_blocks.bit` (+`_ila` debug build). Program with
+`build/program.tcl`; controls are the arrow keys, reset = btnC.
+
+The falling-blocks game is a Tetris-style stacker (single 16x16 pieces). A full
+tetromino Tetris (7 shapes, rotation, line clearing) can be dropped in as a
+larger `.hack` via the same ROM path (see README "Tetris toolchain path").

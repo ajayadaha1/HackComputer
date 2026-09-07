@@ -2,10 +2,10 @@
 #
 #   vivado -mode batch -source build/program.tcl -tclargs [path/to/hack_top.bit]
 #
-# Defaults to the preserved bitstream in ./bitstreams/hack_blocks.bit.
+# Defaults to the preserved bitstream in ./bitstreams/hack_tetris.bit.
 
 set repo [file normalize [file dirname [info script]]/..]
-set bit  [expr {[llength $argv] > 0 ? [lindex $argv 0] : "$repo/bitstreams/hack_blocks.bit"}]
+set bit  [expr {[llength $argv] > 0 ? [lindex $argv 0] : "$repo/bitstreams/hack_tetris.bit"}]
 set bit  [file normalize $bit]
 puts "INFO: programming $bit"
 
